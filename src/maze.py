@@ -123,3 +123,71 @@ class Maze:
         for i in range(self.num_cols):
             for j in range(self.num_rows):
                 self._cells[i][j].visited = False
+
+    def solve(self):
+        return self.solve_r(0, 0)
+
+    def solve_r(self, i, j):
+        self._animate()
+
+        self._cells[i][j].visited = True
+
+        if i == self.num_cols - 1 and j == self.num_rows - 1:
+            return True
+
+        neighbouring_cells = {}
+
+        # left
+        if i - 1 >= 0 and not self._cells[i-1][j].visited:
+            neighbouring_cells["l"] = (i-1, j)
+
+        # right
+        if i + 1 < self.num_cols and not self._cells[i+1][j].visited:
+            neighbouring_cells["r"] = (i + 1, j)
+
+        # top
+        if j - 1 >= 0 and not self._cells[i][j-1].visited:
+            neighbouring_cells["t"] = (i, j-1)
+
+        # bottom
+        if j+1 < self.num_rows and not self._cells[i][j+1].visited:
+            neighbouring_cells["b"] = (i, j+1)
+
+        for key in neighbouring_cells:
+            current_cell = self._cells[i][j]
+            to_cell_i, to_cell_j = neighbouring_cells[key]
+            to_cell = self._cells[to_cell_i][to_cell_j]
+
+            if key == "l":
+                if not current_cell.has_left_wall and not to_cell.has_right_wall:
+                    current_cell.draw_move(to_cell)
+                    if self.solve_r(to_cell_i, to_cell_j):
+                        return True
+                    else:
+                        current_cell.draw_move(to_cell, undo=True)
+
+            if key == "r":
+                if not current_cell.has_right_wall and not to_cell.has_left_wall:
+                    current_cell.draw_move(to_cell)
+                    if self.solve_r(to_cell_i, to_cell_j):
+                        return True
+                    else:
+                        current_cell.draw_move(to_cell, undo=True)
+
+            if key == "t":
+                if not current_cell.has_top_wall and not to_cell.has_bottom_wall:
+                    current_cell.draw_move(to_cell)
+                    if self.solve_r(to_cell_i, to_cell_j):
+                        return True
+                    else:
+                        current_cell.draw_move(to_cell, undo=True)
+
+            if key == "b":
+                if not current_cell.has_bottom_wall and not to_cell.has_top_wall:
+                    current_cell.draw_move(to_cell)
+                    if self.solve_r(to_cell_i, to_cell_j):
+                        return True
+                    else:
+                        current_cell.draw_move(to_cell, undo=True)
+
+        return False

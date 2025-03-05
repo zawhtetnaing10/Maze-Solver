@@ -6,12 +6,13 @@ from maze import Maze
 
 
 def main():
-    win = Window(800, 600)
+    win = Window(1280, 720)
 
-    maze = Maze(50, 50, 5, 5, 15, 15, win, seed=42)
+    maze = Maze(50, 50, 20, 40, 15, 15, win)
     maze._break_entrance_and_exit()
     maze._break_walls_r(0, 0)
     maze._reset_cells_visited()
+    maze.solve()
 
     win.wait_for_close()
 
