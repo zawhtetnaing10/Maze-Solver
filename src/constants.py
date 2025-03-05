@@ -1,0 +1,2 @@
+BACKGROUND_COLOR = "white"
+CELL_COLOR = "gray"
