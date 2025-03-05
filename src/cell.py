@@ -19,6 +19,8 @@ class Cell:
         self._y2 = y2
         self._win = win
 
+        self.visited = False
+
     def draw(self, fill_color):
         top_left = Point(self._x1, self._y1)
         top_right = Point(self._x2, self._y1)
